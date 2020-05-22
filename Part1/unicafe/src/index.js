@@ -17,7 +17,11 @@ const App = () => {
             <h1>Statistics</h1>
             <p>Good: {good}<br />
             neutral: {neutral}<br />
-            bad: {bad}</p>
+            bad: {bad}<br/>
+            total: {good + neutral + bad}<br/>
+            average: {(good * 1 + bad * (-1) / (good + neutral + bad)).toFixed(3)}<br/>
+            positive(%):  {(good) / (good + bad + neutral) * 100} %<br/>
+            </p>
         </div>
     )
 }
