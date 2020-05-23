@@ -2,6 +2,27 @@ import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+const Statistics = ({good, neutral, bad}) => {
+    const total = good + neutral + bad
+    let average = 0
+    let positive = 0
+    if(total !== 0)
+    {
+        average = (good * 1 + bad * (-1) / total)
+        positive = good / total * 100
+    }
+    return (
+        <div>
+            <h1>Statistics</h1>
+            <p>Good: {good}<br />
+            neutral: {neutral}<br />
+            bad: {bad}<br/>
+            total: {total}<br/>
+            average: {average}<br/>
+            positive(%):  {positive} %<br/></p>
+        </div>
+    )
+}
 
 const App = () => {
     const [good, setGood] = useState(0)
@@ -14,14 +35,7 @@ const App = () => {
             <button onClick={() => setGood(good +1)}>Good</button>
             <button onClick={() => setNeutral(neutral +1)}>Neutral</button>
             <button onClick={() => setBad(bad +1)}>Bad</button>
-            <h1>Statistics</h1>
-            <p>Good: {good}<br />
-            neutral: {neutral}<br />
-            bad: {bad}<br/>
-            total: {good + neutral + bad}<br/>
-            average: {(good * 1 + bad * (-1) / (good + neutral + bad)).toFixed(3)}<br/>
-            positive(%):  {(good) / (good + bad + neutral) * 100} %<br/>
-            </p>
+        <Statistics good={good} neutral={neutral} bad={bad}/>
         </div>
     )
 }
