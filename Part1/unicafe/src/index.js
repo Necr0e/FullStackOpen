@@ -4,7 +4,10 @@ import './index.css';
 
 const Statistic = ({text, value, unit}) => {
     return (
-        <p>{text}: {value} {unit}</p>
+        <tr>
+            <td>{text}</td>
+        <td> {value} {unit}</td>
+        </tr>
     )
 }
 const Statistics = ({good, neutral, bad}) => {
@@ -21,14 +24,16 @@ const Statistics = ({good, neutral, bad}) => {
         positive = good / total * 100
     }
     return (
-        <div>
-        <Statistic text='Good' value={good}/>
-        <Statistic text='Neutral' value={neutral}/>
-        <Statistic text='Bad' value={bad}/>
-        <Statistic text='Total' value={total}/>
-        <Statistic text='Average' value={average}/>
-        <Statistic text='Positive' value={positive} unit='%'/>
-        </div>
+            <table>
+                <tbody>
+                <Statistic text='Good' value={good}/>
+                <Statistic text='Neutral' value={neutral}/>
+                <Statistic text='Bad' value={bad}/>
+                <Statistic text='Total' value={total}/>
+                <Statistic text='Average' value={average.toFixed(1)}/>
+                <Statistic text='Positive' value={positive.toFixed(1)} unit='%'/>
+                </tbody>
+            </table>
     )
 }
 
