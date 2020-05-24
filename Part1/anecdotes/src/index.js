@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 
 const anecdotes = [
     'If it hurts, do it more often',
@@ -12,11 +11,19 @@ const anecdotes = [
 ]
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
-  
+    const [selected, setSelected] = useState(0)
+    const handleClick = () => {
+        let newValue = null
+        do {
+            newValue = Math.floor(Math.random() * anecdotes.length)
+        }
+        while (newValue === selected)
+        setSelected(newValue)
+    }
   return (
       <div>
-        {props.anecdotes[selected]}
+        {props.anecdotes[selected]} <br/>
+          <button onClick={handleClick}> Next anecdote</button>
       </div>
   )
 }
