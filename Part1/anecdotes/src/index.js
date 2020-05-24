@@ -12,6 +12,9 @@ const anecdotes = [
 
 const App = (props) => {
     const [selected, setSelected] = useState(0)
+    const [votes, setVotes] = useState(Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf, 0))
+    const maxVotes = Math.max(...votes)
+    const totalVotes = votes.indexOf(maxVotes)
     const handleClick = () => {
         let newValue = null
         do {
@@ -20,10 +23,20 @@ const App = (props) => {
         while (newValue === selected)
         setSelected(newValue)
     }
+    const handleVote = () =>
+    {
+        const copyVotes = [...votes]
+        copyVotes[selected] += 1
+        setVotes(copyVotes)
+    }
   return (
       <div>
         {props.anecdotes[selected]} <br/>
-          <button onClick={handleClick}> Next anecdote</button>
+        <p>Has {votes[selected]} votes</p>
+          <button onClick={handleVote}>Vote</button>
+          <button onClick={handleClick}>Next anecdote</button>
+          <h2>Anecdote with the most votes</h2>
+          <p>{props.anecdotes[totalVotes]}</p>
       </div>
   )
 }
