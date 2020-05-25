@@ -2,19 +2,22 @@ import React, {useState} from 'react'
 import Person from './components/Person'
         
 const App = () => {
-    const [ persons, setPersons ] = useState([{ name: 'Arto Hellas', id: 0}])
+    const [ persons, setPersons ] = useState([{ name: 'Arto Hellas'}])
     const [ newName, setNewName ] = useState('')
     
     const addName = (event) => {
         event.preventDefault()
+        
         const newPerson = {
-            name: newName,
-            id: persons.length
+            name: newName
         }
-        setPersons(persons.concat(newPerson))
+        persons.find(person => person.name.toLowerCase() === newName.toLowerCase()) 
+            ? (alert(`${newName} is already in the phone book`)) 
+            : (setPersons(persons.concat(newPerson)))
         setNewName('')
     }
     const handleNewPerson = (event) => {
+        
         setNewName(event.target.value)
     }
     return (
@@ -34,7 +37,7 @@ const App = () => {
             </form>
             <h2>Numbers</h2>
             <div>
-                {persons.map(person => <Person key={person.id} person={person}/>)}
+                {persons.map(person => <Person key={person.name} person={person}/>)}
             </div>
         </div>
     )
