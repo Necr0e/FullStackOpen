@@ -2,33 +2,41 @@ import React, {useState} from 'react'
 import Person from './components/Person'
         
 const App = () => {
-    const [ persons, setPersons ] = useState([{ name: 'Arto Hellas'}])
+    const [ persons, setPersons ] = useState([{ name: 'Arto Hellas', number: '040-1234-567'}])
     const [ newName, setNewName ] = useState('')
+    const [ newNumber, setNewNumber] = useState('')
     
-    const addName = (event) => {
+    const addPerson = (event) => {
         event.preventDefault()
         
         const newPerson = {
-            name: newName
+            name: newName,
+            number: newNumber
         }
         persons.find(person => person.name.toLowerCase() === newName.toLowerCase()) 
             ? (alert(`${newName} is already in the phone book`)) 
             : (setPersons(persons.concat(newPerson)))
         setNewName('')
     }
-    const handleNewPerson = (event) => {
-        
+    const handleNewName = (event) => {
         setNewName(event.target.value)
+    }
+    
+    const handleNewNumber = (event) => {
+        setNewNumber(event.target.value)
     }
     return (
         <div>
             <h2>Phonebook</h2>
             
-            <form onSubmit={addName}>
+            <form onSubmit={addPerson}>
                 <div>
                     name:
                     <input value={newName}
-                           onChange={handleNewPerson}/>
+                           onChange={handleNewName}/><br/>
+                    number:
+                    <input value={newNumber}
+                           onChange={handleNewNumber}/>
                 </div>
 
                 <div>
