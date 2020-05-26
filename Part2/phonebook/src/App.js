@@ -1,18 +1,22 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 import People from './components/People'
 import Filter from './components/Filter'
 import AddPerson from "./components/AddPerson";
         
 const App = () => {
-    const [ persons, setPersons ] = useState([
-        { name: 'Arto Hellas', number: '040-1234-567'},
-        { name: 'Ada Lovelace', number: '39-44-5323523'},
-        { name: 'Dan Abromov', number: '12-43-234345'},
-        { name: 'Mary Poppendieck', number: '39-23-6423122'}
-        ])
+    const [ persons, setPersons ] = useState([])
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber] = useState('')
     const [ query, setQuery] = useState('')
+    
+    const dataHook = () => {
+        axios.get('http://localhost:3001/persons')
+            .then(response => {
+                setPersons(response.data)
+            })
+    }
+    useEffect(dataHook, [])
     
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -29,11 +33,9 @@ const App = () => {
     const handleNewName = (event) => {
         setNewName(event.target.value)
     }
-    
     const handleNewNumber = (event) => {
         setNewNumber(event.target.value)
     }
-    
     const handleFilterChange = (event) => {
         setQuery(event.target.value)
     }
