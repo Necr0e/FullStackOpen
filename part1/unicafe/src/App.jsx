@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import Header from './components/Header.jsx'
-import Button from './components/Button.jsx'
+import Header from './components/Header'
+import Button from './components/Button'
+import Statistics from './components/Statistics'
 
 const App = () => {
     const [good, setGood] = useState(0)
@@ -13,15 +14,12 @@ const App = () => {
     
     return (
         <div>
-            <Header text="Give Feedback"/>
-            <Button handleClick={handleGoodClick} text="Good"/>
-            <Button handleClick={handleNeutralClick} text="Neutral"/>
-            <Button handleClick={handleBadClick} text="Bad"/>
-            <Header text="Statistics"/>
-            <p>good: {good}</p>
-            <p>neutral: {neutral}</p>
-            <p>bad: {bad}</p>
-            
+            <Header text='Give Feedback'/>
+            <Button handleClick={handleGoodClick} text='Good'/>
+            <Button handleClick={handleNeutralClick} text='Neutral'/>
+            <Button handleClick={handleBadClick} text='Bad'/>
+            <Header text='Statistics'/>
+            <Statistics good={good} neutral={neutral} bad={bad}/>
         </div>
     )
 }
