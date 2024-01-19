@@ -1,9 +1,9 @@
 ﻿import Part from "./Part.jsx";
-const Content = (props) => {
-    const parts = props.parts.map((part, index) =>  <Part key={index} part={part.name} exercises={part.exercises} />)
+const Content = ({parts}) => {
+   
     return (
         <div>
-            {parts}
+            {parts.map((element) => <Part key={element.id} part={element}/>)}
         </div>
     )
 }
