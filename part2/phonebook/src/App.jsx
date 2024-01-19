@@ -1,39 +1,31 @@
 import {useState} from 'react'
+import Form from './components/Form'
+import People from './components/People'
+import Search from './components/Search'
 
 const App = () => {
     const [persons, setPersons] = useState([
-        { name: 'Arto Hellas' },
-        { name: 'Otto Seitamaa'}
-    ])
-    
+        { name: 'Arto Hellas', number: '040-4522533' }])
     const [newName, setNewName] = useState('')
-    const handleNameChange = (event) => {
-        setNewName(event.target.value)
-    }
-    
-    const addName = (event) => {
+    const [newNumber, setNewNumber] = useState('')
+    const [searchString, setSearchString] = useState('')
+    const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(searchString.toLowerCase()))
+    const checkIfExist = () => persons.findIndex((person) => person.name === newName)
+    const addToPhonebook = () => setPersons(persons.concat({ name: newName, number: newNumber}))
+    const handleSubmit = (event) => {
         event.preventDefault()
-        const personObject = {
-            name: newName
-        }
-        setPersons(persons.concat(personObject))
+        checkIfExist(newName) >= 0 ? alert(`${newName} is already added to the phonebook.`) : addToPhonebook()
         setNewName('')
     }
-    
+   
     return (
         <div>
-            <h2>Phonebook</h2>
-            <div>
-            <form onSubmit={addName}>Name: 
-                <input value={newName}
-                       onChange={handleNameChange}/><br></br>
-                <button type="submit">Add</button>
-            </form>
-            </div>
-            <h2>Numbers:</h2>
-            <div>
-                {persons.map((person) => <p key={person.name}> {person.name} </p>)}
-            </div>
+            <h1>Phonebook</h1>
+            <Search searchString={searchString} setSearchString={setSearchString}/>
+            <h2>Add a new person and number</h2>
+            <Form handleSubmit={handleSubmit} setNewName={setNewName} newName={newName} setNewNumber={setNewNumber} newNumber={newNumber}/>
+            <h2>People in the phonebook</h2>
+            <People people={filteredPersons}/>
         </div>
     )
 }
