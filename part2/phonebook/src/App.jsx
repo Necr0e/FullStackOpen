@@ -1,15 +1,22 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import axios from 'axios'
 import Form from './components/Form'
 import People from './components/People'
 import Search from './components/Search'
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '040-4522533' }])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchString, setSearchString] = useState('')
     const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(searchString.toLowerCase()))
+    
+    useEffect(() => {
+        axios.get('http://localhost:3001/persons')
+            .then(response => {
+                setPersons(response.data)
+            })
+    }, [])
     const checkIfExist = () => persons.findIndex((person) => person.name === newName)
     const addToPhonebook = () => setPersons(persons.concat({ name: newName, number: newNumber}))
     const handleSubmit = (event) => {
@@ -17,7 +24,8 @@ const App = () => {
         checkIfExist(newName) >= 0 ? alert(`${newName} is already added to the phonebook.`) : addToPhonebook()
         setNewName('')
     }
-   
+    
+    
     return (
         <div>
             <h1>Phonebook</h1>
