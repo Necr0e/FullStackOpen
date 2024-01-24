@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import PersonService from './services/PersonService'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
     const [filter, setNewFilter] = useState('')
     
     useEffect(() => {
-        axios.get('http://localhost:3001/persons')
-            .then(response => {
-                setPersons(response.data)
-            })
+        PersonService
+            .getAll()
+            .then((allPersons) => { setPersons(allPersons)})
+            .catch((err) => alert(err))
     }, [])
 
     const handleNameChange = (event) => {
@@ -26,32 +26,34 @@ const App = () => {
     const handleFilterChange = (event) => {
         setNewFilter(event.target.value)
     }
-    const existing_person = persons.find((person) => 
-        person.name.toLowerCase() === newName.toLowerCase()
-    )
-
-    const addPerson = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
-        const nameObject = {
-            name: newName,
-            number: newNumber,
-            id: persons.length + 1
-        }
-        if (!existing_person)
-            setPersons(persons.concat(nameObject))
-        else {
+        const existing_person = persons.find((person) => 
+            person.name.toLowerCase() === newName.toLowerCase())
+
+        if (existing_person) {
             alert(`${newName} is already in the phonebook!`)
+            setNewName('')
+            setNewNumber('')
+            return
         }
 
-        setNewName('')
+        const newPerson = { id: (persons.length + 1), name: newName, number: newNumber }
+        PersonService.create(newPerson).then((returnedPerson) => {
+            setPersons(persons.concat(returnedPerson))
+            setNewName('')
+            setNewNumber('')
+        })
+            .catch((err) => alert(err))
     }
+    
     return (
         <div>
             <h2>Phonebook</h2>
                 <Filter filter={filter} onFilterChange={handleFilterChange}/>
             <h2>Add a New</h2>
             <PersonForm 
-                onFormSubmit={addPerson} 
+                onFormSubmit={handleSubmit} 
                 onNameChange={handleNameChange} 
                 onNumberChange={handleNumberChange} 
                 nameValue={newName} 
