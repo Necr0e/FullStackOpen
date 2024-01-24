@@ -1,15 +1,14 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
-import Form from './components/Form'
-import People from './components/People'
-import Search from './components/Search'
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
-    const [searchString, setSearchString] = useState('')
-    const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(searchString.toLowerCase()))
+    const [filter, setNewFilter] = useState('')
     
     useEffect(() => {
         axios.get('http://localhost:3001/persons')
@@ -17,24 +16,51 @@ const App = () => {
                 setPersons(response.data)
             })
     }, [])
-    const checkIfExist = () => persons.findIndex((person) => person.name === newName)
-    const addToPhonebook = () => setPersons(persons.concat({ name: newName, number: newNumber}))
-    const handleSubmit = (event) => {
+
+    const handleNameChange = (event) => {
+        setNewName(event.target.value)
+    }
+    const handleNumberChange = (event) => {
+        setNewNumber(event.target.value)
+    }
+    const handleFilterChange = (event) => {
+        setNewFilter(event.target.value)
+    }
+    const existing_person = persons.find((person) => 
+        person.name.toLowerCase() === newName.toLowerCase()
+    )
+
+    const addPerson = (event) => {
         event.preventDefault()
-        checkIfExist(newName) >= 0 ? alert(`${newName} is already added to the phonebook.`) : addToPhonebook()
+        const nameObject = {
+            name: newName,
+            number: newNumber,
+            id: persons.length + 1
+        }
+        if (!existing_person)
+            setPersons(persons.concat(nameObject))
+        else {
+            alert(`${newName} is already in the phonebook!`)
+        }
+
         setNewName('')
     }
-    
-    
     return (
         <div>
-            <h1>Phonebook</h1>
-            <Search searchString={searchString} setSearchString={setSearchString}/>
-            <h2>Add a new person and number</h2>
-            <Form handleSubmit={handleSubmit} setNewName={setNewName} newName={newName} setNewNumber={setNewNumber} newNumber={newNumber}/>
-            <h2>People in the phonebook</h2>
-            <People people={filteredPersons}/>
+            <h2>Phonebook</h2>
+                <Filter filter={filter} onFilterChange={handleFilterChange}/>
+            <h2>Add a New</h2>
+            <PersonForm 
+                onFormSubmit={addPerson} 
+                onNameChange={handleNameChange} 
+                onNumberChange={handleNumberChange} 
+                nameValue={newName} 
+                numberValue={newNumber}
+            />
+            <h2>Numbers</h2>
+                <Persons persons={persons} filter={filter}/>
         </div>
     )
 }
+
 export default App

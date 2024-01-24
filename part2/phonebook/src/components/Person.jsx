@@ -1,2 +1,8 @@
-﻿const Person = ({name, number}) => <p key={name}>{name} - {number}</p>
+﻿
+const Person = ({ person }) => {
+    return (
+        <p key={person.name}> {person.name} {person.number}</p>
+    )
+}
+
 export default Person
