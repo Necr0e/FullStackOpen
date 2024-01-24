@@ -26,6 +26,16 @@ const App = () => {
     const handleFilterChange = (event) => {
         setNewFilter(event.target.value)
     }
+
+    
+    const handleDelete = (id) => {
+        if (window.confirm(`Are you sure you wish to delete this person?`)) {
+            PersonService.remove(id).then(() => {
+                setPersons(persons.filter((person) => person.id !== id))
+            }).catch((err) => alert(err))
+        }
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault()
         const existing_person = persons.find((person) => 
@@ -37,8 +47,7 @@ const App = () => {
             setNewNumber('')
             return
         }
-
-        const newPerson = { id: (persons.length + 1), name: newName, number: newNumber }
+        const newPerson = { name: newName, number: newNumber }
         PersonService.create(newPerson).then((returnedPerson) => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
@@ -60,7 +69,7 @@ const App = () => {
                 numberValue={newNumber}
             />
             <h2>Numbers</h2>
-                <Persons persons={persons} filter={filter}/>
+                <Persons persons={persons} filter={filter} handleDelete={handleDelete}/>
         </div>
     )
 }
