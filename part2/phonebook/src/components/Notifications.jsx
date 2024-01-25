@@ -8,5 +8,4 @@
         </div>
     )
 }
-
 export default Notifications

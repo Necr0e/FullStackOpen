@@ -1,5 +1,4 @@
 ﻿import Person from './Person'
-
 const Persons = ({ persons, filter, handleDelete }) => {
     return (
         <div>

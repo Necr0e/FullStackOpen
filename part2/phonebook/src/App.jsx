@@ -30,7 +30,6 @@ const App = () => {
     const handleFilterChange = (event) => {
         setNewFilter(event.target.value)
     }
-    
     const handleDelete = (id) => {
         if (window.confirm(`Are you sure you wish to delete this person?`)) {
             PersonService.remove(id).then(() => {
@@ -42,7 +41,6 @@ const App = () => {
             }).catch((err) => alert(err))
         }
     }
-    
     const updatePerson = (id) => {
         const existing_person = persons.find(n => n.id === id)
         const updatedPerson = {...existing_person, number: newNumber}
@@ -67,7 +65,6 @@ const App = () => {
                 setNewNumber('')
             })
     }
-
     const handleSubmit = (event) => {
         event.preventDefault()
         
@@ -103,7 +100,6 @@ const App = () => {
         })
             .catch((err) => alert(err))
     }
-    
     return (
         <div>
             <h2>Phonebook</h2>
