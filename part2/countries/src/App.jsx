@@ -12,7 +12,6 @@ const App = () => {
                 setResult(response.data)
             })
     }, [])
-    
     const handleCountryChange = (event) => {
         setCountry(event.target.value)
     }
