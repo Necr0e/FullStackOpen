@@ -1,7 +1,7 @@
 ﻿import Results from "./Results";
 import CountryDisplay from "./CountryDisplay";
 const Choice = ({ result, country }) => {
-    let filtered = []
+    let filtered
     
     if (country.length > 0) {
         filtered = result.filter(result => 
