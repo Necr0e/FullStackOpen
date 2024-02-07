@@ -1,9 +1,13 @@
-﻿import React from 'react'
-const Person = ({ person, handleDelete }) => {
+﻿import { Button } from './Form'
+
+export const Person = (person, props) => {
     return (
-        <p key={person.name}> {person.name} {person.number}&nbsp;
-        <button onClick={() => handleDelete(person.id)}>Delete</button>
-        </p>
+        <li key={person.id}>
+            {person.name}
+            {' '}
+            {person.number}
+            {' '}
+            <Button onClick={() => props.buttonFunction(person.id)} text='DELETE' />
+        </li>
     )
 }
-export default Person

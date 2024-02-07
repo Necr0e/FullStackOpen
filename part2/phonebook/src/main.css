@@ -1,11 +1,5 @@
-﻿body {
-    margin: 20px;
-    font-family: "Segoe UI", "Roboto", "Oxygen", "sans-serif";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.message {
+﻿.error {
+    color: red;
     background: lightgrey;
     font-size: 20px;
     border-style: solid;
@@ -16,8 +10,10 @@
 
 .success {
     color: green;
-}
-
-.error {
-    color: red;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
 }
