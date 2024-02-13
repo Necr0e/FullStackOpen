@@ -1,56 +1,39 @@
-﻿const lodash = require('lodash')
-const dummy = (blogs) => {
+﻿const _ = require('lodash')
+const dummy = () => {
     return 1
 }
 
 const totalLikes = (blogs) => {
-    const reducer = (sum, blog) => sum + blog.likes
-    return blogs.reduce(reducer, 0)
+    return blogs.length === 0 ? 0 : _.sumBy(blogs, 'likes')
 }
 
 const FavoriteBlog = (blogs) => {
-    if (blogs.length === 0) return {}
-    const blogLikes = blogs.map(blog => blog.likes)
-    const largestIndex = blogLikes.indexOf(Math.max(...blogLikes))
-    const largestInfo = blogs[largestIndex]
-
-    return {
-        title: largestInfo.title,
-        author: largestInfo.author,
-        likes: largestInfo.likes
-    }
+    return blogs.length === 0 ? {} : _.maxBy(blogs, 'likes')
 }
 
 const MostBlogs = (blogs) => {
     if (blogs.length === 0) return {}
-    let authors = blogs.map(blog => blog.author)
-    authors = [...new Set(authors)]
-
-    let published = new Array(authors.length).fill(0)
-    blogs.map(blog => published[authors.indexOf(blog.author)] += 1)
-
-    let index = published.indexOf(Math.max(...published))
-
-    return {
-        author: authors[index],
-        blogs: published[index]
-    }
+    const numBlogs = _.countBy(blogs, 'author')
+    const totals = _.map(numBlogs, (total, author) => {
+        return {
+            author,
+            blogs: total
+        }
+    })
+    return _.maxBy(totals, 'blogs')
 }
 
 const MostLikes = (blogs) => {
     if (blogs.length === 0) return {}
-    let authors = blogs.map(blog => blog.author)
-    authors = [...new Set(authors)]
-
-    let totalLikes = new Array(authors.length).fill(0)
-    blogs.map(blog => totalLikes[authors.indexOf(blog.author)] += blog.likes)
-
-    let index = totalLikes.indexOf(Math.max(...totalLikes))
-
-    return {
-        author: authors[index],
-        likes: totalLikes[index]
-    }
+    const authors = _.groupBy(blogs, 'author')
+    console.log(authors)
+    const likes = _.map(authors, (blogList, author) => {
+        return {
+            author,
+            likes: _.sumBy(blogList, 'likes')
+        }
+    })
+    return _.maxBy(likes, 'likes')
 }
 
 module.exports = { dummy, totalLikes, FavoriteBlog, MostBlogs, MostLikes}
