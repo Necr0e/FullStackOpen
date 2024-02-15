@@ -26,7 +26,6 @@ const MostBlogs = (blogs) => {
 const MostLikes = (blogs) => {
     if (blogs.length === 0) return {}
     const authors = _.groupBy(blogs, 'author')
-    console.log(authors)
     const likes = _.map(authors, (blogList, author) => {
         return {
             author,
