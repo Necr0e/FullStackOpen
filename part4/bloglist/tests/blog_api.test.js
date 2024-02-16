@@ -39,7 +39,7 @@ describe('When retrieving blogs from /api/blogs/', () => {
         assert.notStrictEqual(blogsInDb[0].id, undefined)
     })
 })
-
+//TODO: move to own file
 describe('POST related tests', () => {
     it('A Blog cannot be added without content', async () => {
         const invalidBlog = {
@@ -110,7 +110,7 @@ describe('POST related tests', () => {
     })
 })
 
-describe('Can a blog be viewed or deleted', () => {
+describe('Can a blog be viewed, deleted or updated', () => {
     it('A blog post can be viewed', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToView = blogsAtStart[0]
@@ -134,6 +134,16 @@ describe('Can a blog be viewed or deleted', () => {
         const contents = blogsAtEnd.map(r => r.title)
         assert(!contents.includes(blogToDelete.title))
         assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    })
+    it('A blog post can be updated', async () => {
+        const blogAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogAtStart[0]
+        blogToUpdate.likes = 99
+        await api.put(`/api/blogs/${blogToUpdate.id}`)
+            .send(blogToUpdate)
+        const blogAtEnd = await api.get(`/api/blogs/${blogToUpdate.id}`)
+
+        assert.strictEqual(blogAtEnd.body.likes, 99)
     })
     after(async () => {
         await mongoose.connection.close()
