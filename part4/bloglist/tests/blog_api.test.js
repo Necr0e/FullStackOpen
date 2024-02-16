@@ -7,8 +7,6 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('../utils/test_Api_Helper')
 
-
-
 beforeEach(async () => {
     await Blog.deleteMany({})
 
@@ -17,7 +15,7 @@ beforeEach(async () => {
     await Promise.all(promiseArray)
 })
 
-describe('Basic blog function tests', () => {
+describe('When retrieving blogs from /api/blogs/', () => {
     it('Are returned as json', async () => {
         await api.get('/api/blogs')
             .expect(200)
@@ -36,13 +34,13 @@ describe('Basic blog function tests', () => {
 
         assert(contents.includes('My Second Blog'))
     })
-    it('Unique identifier is Id', async () => {
+    it('Unique identifier is Id and is not undefined', async () => {
         const blogsInDb = await helper.blogsInDb()
         assert.notStrictEqual(blogsInDb[0].id, undefined)
     })
 })
 
-describe('Blog manipulation', () => {
+describe('POST related tests', () => {
     it('A Blog cannot be added without content', async () => {
         const invalidBlog = {
             likes: 50
@@ -74,6 +72,45 @@ describe('Blog manipulation', () => {
         const contents = blogsInDb.map(n => n.title)
         assert(contents.includes('Test Blog'))
     })
+    it('If the likes property is missing, default to 0.', async () => {
+        const blogWithoutLikes = {
+            title: "blog with no likes",
+            author: "unliked author",
+            url: "http://nolikes.com"
+        }
+        const response = await api
+            .post('/api/blogs/')
+            .send(blogWithoutLikes)
+
+        assert.strictEqual(response.body.likes, 0)
+    })
+    it('If the title property is missing, it will not be added', async () => {
+        const blogWithoutTitle = {
+            author: "unliked author",
+            url: "http://nolikes.com",
+            likes: 5
+        }
+        const response = await api
+            .post('/api/blogs/')
+            .send(blogWithoutTitle)
+
+        assert.strictEqual(response.status, 400)
+    })
+    it('If the url property is missing, it will not be added', async () => {
+        const blogWithoutUrl = {
+            title: "no url",
+            author: "unliked author",
+            likes: 3
+        }
+        const response = await api
+            .post('/api/blogs/')
+            .send(blogWithoutUrl)
+
+        assert.strictEqual(response.status, 400)
+    })
+})
+
+describe('Can a blog be viewed or deleted', () => {
     it('A blog post can be viewed', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToView = blogsAtStart[0]
@@ -96,7 +133,7 @@ describe('Blog manipulation', () => {
 
         const contents = blogsAtEnd.map(r => r.title)
         assert(!contents.includes(blogToDelete.title))
-        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
     after(async () => {
         await mongoose.connection.close()
